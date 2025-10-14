@@ -25,7 +25,7 @@ void print_board(int board[MAX_HEIGHT][MAX_WIDTH]) {
     for (int i = 0; i < MAX_HEIGHT; i++) {
 
         // Coordinates A - E.
-        char letter = (int)(i + ASCII_A);
+        char letter = i + ASCII_A;
         printf("%c", letter);
 
         // Rest of the row.
@@ -42,6 +42,10 @@ int main(void) {
      *
      * [X] - Crear array bidimensional a 0 y mostrar en pantalla (junto con coordenadas).
      * [ ] - Crear arrays barcos.
+     *      - 1 Acorazado     4
+     *      - 2 Crucero       3
+     *      - 2 Destructores  2
+     *      - 2 Submarino     1
      * [ ] - Inicializar los barcos a 1 en el array inicial.
      * [ ] - Recoger respuesta de coordenadas del usuarios.
      * [ ] - Calcular: agua, barco tocado o barco hundido.
