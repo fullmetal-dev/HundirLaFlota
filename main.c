@@ -43,24 +43,31 @@ void print_board(int board[MAX_HEIGHT][MAX_WIDTH]) {
     }
 }
 
+int get_position(int maximum, int with_length) {
+    int position;
+
+    srand(time(NULL));
+
+    do {
+        position = rand() % maximum;
+    } while((position + with_length) > maximum);
+
+    return position;
+}
+
+
 void build_ship(int length, int board[MAX_HEIGHT][MAX_WIDTH]) {
 
     srand(time(NULL));
     int first_position_x = 0;
     int position_y = 0;
 
-    do {
-        first_position_x = rand() % MAX_HEIGHT;
-    } while((first_position_x + length) > MAX_HEIGHT);
-
-    do {
-        position_y = rand() % MAX_WIDTH;
-    } while (position_y > MAX_WIDTH);
+    first_position_x = get_position(MAX_HEIGHT, length);
+    position_y = get_position(MAX_WIDTH, 0);
 
     for (int i = 0; i < length; i++) {
         board[(first_position_x + i)][position_y] = 1;
     }
-
 }
 
 int main(void) {
