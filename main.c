@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
 #define MAX_WIDTH 10
 #define MAX_HEIGHT 5
@@ -41,11 +43,24 @@ void print_board(int board[MAX_HEIGHT][MAX_WIDTH]) {
     }
 }
 
-struct ship build_ship(int position[2], char* name) {
+void build_ship(int length, int board[MAX_HEIGHT][MAX_WIDTH]) {
 
-    struct ship new_ship = { *position, *name };
+    srand(time(NULL));
+    int first_position_x = 0;
+    int position_y = 0;
 
-    return new_ship;
+    do {
+        first_position_x = rand() % MAX_HEIGHT;
+    } while((first_position_x + length) > MAX_HEIGHT);
+
+    do {
+        position_y = rand() % MAX_WIDTH;
+    } while (position_y > MAX_WIDTH);
+
+    for (int i = 0; i < length; i++) {
+        board[(first_position_x + i)][position_y] = 1;
+    }
+
 }
 
 int main(void) {
@@ -69,12 +84,10 @@ int main(void) {
 
     init_board(board);
 
+    build_ship(4, board);
+
     print_board(board);
 
-    int position[2] = {1 , 1};
-    char* name = "Destructor";
-
-    struct ship new = build_ship(position, name);
 
     return 0;
 }
