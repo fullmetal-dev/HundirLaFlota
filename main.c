@@ -4,6 +4,11 @@
 #define MAX_HEIGHT 5
 #define ASCII_A 65
 
+struct ship {
+    int position[2];
+    char* name;
+};
+
 void init_board(int board[MAX_HEIGHT][MAX_WIDTH]) {
     for (int i = 0; i < MAX_HEIGHT; i++) {
         for (int j = 0; j < MAX_WIDTH; j++) {
@@ -36,6 +41,13 @@ void print_board(int board[MAX_HEIGHT][MAX_WIDTH]) {
     }
 }
 
+struct ship build_ship(int position[2], char* name) {
+
+    struct ship new_ship = { *position, *name };
+
+    return new_ship;
+}
+
 int main(void) {
     /*
      * HUNDIR LA FLOTA
@@ -58,6 +70,11 @@ int main(void) {
     init_board(board);
 
     print_board(board);
+
+    int position[2] = {1 , 1};
+    char* name = "Destructor";
+
+    struct ship new = build_ship(position, name);
 
     return 0;
 }
