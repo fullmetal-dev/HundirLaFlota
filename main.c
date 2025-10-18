@@ -59,14 +59,28 @@ int get_position(int maximum, int with_length) {
 void build_ship(int length, int board[MAX_HEIGHT][MAX_WIDTH]) {
 
     srand(time(NULL));
-    int first_position_x = 0;
-    int position_y = 0;
+    int first_limit, second_limit;
+    int first_position = 0;
+    int second_position = 0;
 
-    first_position_x = get_position(MAX_HEIGHT, length);
-    position_y = get_position(MAX_WIDTH, 0);
+    int is_vertical = rand() % 2 + 1;
+
+    if (is_vertical == 1) {
+        first_limit = MAX_HEIGHT;
+        second_limit = MAX_WIDTH;
+    }else {
+        first_limit = MAX_WIDTH;
+        second_limit = MAX_HEIGHT;
+    }
+
+    first_position = get_position(first_limit, length);
+    second_position = get_position(second_limit, 0);
 
     for (int i = 0; i < length; i++) {
-        board[(first_position_x + i)][position_y] = 1;
+        if (is_vertical == 1)
+            board[(first_position + i)][second_position] = 1;
+        else
+            board[second_position][(first_position + i)] = 1;
     }
 }
 
@@ -75,12 +89,9 @@ int main(void) {
      * HUNDIR LA FLOTA
      *
      * [X] - Crear array bidimensional a 0 y mostrar en pantalla (junto con coordenadas).
-     * [ ] - Crear arrays barcos.
-     *      - 1 Acorazado     4
-     *      - 2 Crucero       3
-     *      - 2 Destructores  2
-     *      - 2 Submarino     1
-     * [ ] - Inicializar los barcos a 1 en el array inicial.
+     * [ ] - Inicializar los barcos a 1 en la matriz board.
+     *      [X] - Inicializar barcos en horizontal o vertical aleatoriamente.
+     *      [ ] - Flotar barcos donde haya espacio disponible y no choque con otros barcos.
      * [ ] - Recoger respuesta de coordenadas del usuarios.
      * [ ] - Calcular: agua, barco tocado o barco hundido.
      * [ ] - Calcular: fin del juego.
