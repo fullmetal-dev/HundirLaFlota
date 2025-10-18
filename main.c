@@ -141,10 +141,19 @@ void finished_game(int total_ships, int* is_finished) {
     if (total_ships == 0) {
         *is_finished = 1;
 
-        printf("Has hundido todos los barcos!!");
+        printf("Has hundido todos los barcos!!\n");
     }else {
-        printf("Quedan barcos enemigos...");
+        printf("Quedan barcos enemigos...\n");
     }
+}
+
+void get_coordinates(int* x, int* y) {
+    printf("Dame las coordenadas del ataque.\n");
+    printf("X:");
+    scanf("%d", x);
+
+    printf("Y:");
+    scanf("%d", y);
 }
 
 int main(void) {
@@ -157,31 +166,30 @@ int main(void) {
      *      [X] - Flotar barcos donde haya espacio disponible y no choque con otros barcos.
      * [X] - Calcular: agua o barco tocado.
      * [X] - Calcular: fin del juego.
-     * [ ] - Recoger respuesta de coordenadas del usuarios.
-     * [ ] - Menú.
+     * [X] - Recoger respuesta de coordenadas del usuarios.
+     * [X] - Montar juego.
      */
     int is_finished = 0;
+    int x = 0, y = 0;
     int board[MAX_HEIGHT][MAX_WIDTH];
 
     init_board(board);
 
-    // build_ship(4, board);
-    // build_ship(3, board);
-    // build_ship(3, board);
-    // build_ship(2, board);
+    build_ship(4, board);
+    build_ship(3, board);
+    build_ship(3, board);
+    build_ship(2, board);
 
-    float_ship(4, 1, 0, 0, board);
+    do {
+        print_board(board);
 
-    calculate_shoot(0, 0, board);
-    calculate_shoot(1, 0, board);
-    calculate_shoot(0, 1, board);
-    calculate_shoot(0, 2, board);
-    calculate_shoot(0, 3, board);
+        get_coordinates(&x, &y);
+        calculate_shoot(x, y, board);
 
+        int total_ships = still_floated_ships(board);
+        finished_game(total_ships, &is_finished);
+    }while (is_finished == 0);
     print_board(board);
-
-    int total_ships = still_floated_ships(board);
-    finished_game(total_ships, &is_finished);
 
     return 0;
 }
