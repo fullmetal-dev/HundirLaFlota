@@ -6,11 +6,6 @@
 #define MAX_HEIGHT 5
 #define ASCII_A 65
 
-struct ship {
-    int position[2];
-    char* name;
-};
-
 void init_board(int board[MAX_HEIGHT][MAX_WIDTH]) {
     for (int i = 0; i < MAX_HEIGHT; i++) {
         for (int j = 0; j < MAX_WIDTH; j++) {
@@ -19,6 +14,12 @@ void init_board(int board[MAX_HEIGHT][MAX_WIDTH]) {
     }
 }
 
+/*
+ * 0 - Water                - print 0
+ * 1 - Ship                 - print 1
+ * 2 - shoot on the water   - print W
+ * 3 - shoot on a ship.     - print X
+ */
 void print_board(int board[MAX_HEIGHT][MAX_WIDTH]) {
 
     printf(" "); // blank space.
@@ -37,7 +38,12 @@ void print_board(int board[MAX_HEIGHT][MAX_WIDTH]) {
 
         // Rest of the row.
         for (int j = 0; j < MAX_WIDTH; j++) {
-            printf("%d", board[i][j]);
+            if (board[i][j] == 0 || board[i][j] == 1)
+                printf("%d", board[i][j]);
+            else if (board[i][j] == 2)
+                printf("%c", 'W');
+            else if (board[i][j] == 3)
+                printf("%c", 'X');
         }
         printf("\n");
     }
@@ -69,6 +75,17 @@ int can_be_floated(int length, int is_vertical, int first_position, int second_p
     return sum;
 }
 
+void float_ship(int length, int is_vertical, int first_position, int second_position
+    , int board[MAX_HEIGHT][MAX_WIDTH]) {
+
+    for (int i = 0; i < length; i++) {
+        if (is_vertical == 1)
+            board[(first_position + i)][second_position] = 1;
+        else
+            board[second_position][(first_position + i)] = 1;
+    }
+}
+
 void build_ship(int length, int board[MAX_HEIGHT][MAX_WIDTH]) {
 
     srand(time(NULL));
@@ -91,12 +108,20 @@ void build_ship(int length, int board[MAX_HEIGHT][MAX_WIDTH]) {
         second_position = get_position(second_limit, 0);
     }while (can_be_floated(length, is_vertical, first_position, second_position, board) > 0);
 
-    for (int i = 0; i < length; i++) {
-        if (is_vertical == 1)
-            board[(first_position + i)][second_position] = 1;
-        else
-            board[second_position][(first_position + i)] = 1;
-    }
+    float_ship(length, is_vertical, first_position, second_position, board);
+}
+
+/*
+ * 0 - Water
+ * 1 - Ship
+ * 2 - shoot on the water
+ * 3 - shoot on a ship.
+ */
+void calculate_shoot(int x, int y, int board[MAX_HEIGHT][MAX_WIDTH]) {
+    if (board[y][x] == 0)
+        board[y][x] = 2;
+    else if (board[y][x] == 1)
+        board[y][x] = 3;
 }
 
 int main(void) {
@@ -107,9 +132,9 @@ int main(void) {
      * [ ] - Inicializar los barcos a 1 en la matriz board.
      *      [X] - Inicializar barcos en horizontal o vertical aleatoriamente.
      *      [X] - Flotar barcos donde haya espacio disponible y no choque con otros barcos.
-     * [ ] - Recoger respuesta de coordenadas del usuarios.
-     * [ ] - Calcular: agua, barco tocado o barco hundido.
+     * [X] - Calcular: agua o barco tocado.
      * [ ] - Calcular: fin del juego.
+     * [ ] - Recoger respuesta de coordenadas del usuarios.
      * [ ] - Menú.
      */
 
@@ -117,10 +142,15 @@ int main(void) {
 
     init_board(board);
 
-    build_ship(4, board);
-    build_ship(3, board);
-    build_ship(3, board);
-    build_ship(2, board);
+    // build_ship(4, board);
+    // build_ship(3, board);
+    // build_ship(3, board);
+    // build_ship(2, board);
+
+    float_ship(4, 1, 0, 0, board);
+
+    calculate_shoot(0, 0, board);
+    calculate_shoot(1, 0, board);
 
     print_board(board);
 
