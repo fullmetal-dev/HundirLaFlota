@@ -124,6 +124,29 @@ void calculate_shoot(int x, int y, int board[MAX_HEIGHT][MAX_WIDTH]) {
         board[y][x] = 3;
 }
 
+int still_floated_ships(int board[MAX_HEIGHT][MAX_WIDTH]) {
+    int sum = 0;
+
+    for (int i = 0; i < MAX_HEIGHT; i++) {
+        for (int j = 0; j < MAX_WIDTH; j++) {
+            if (board[i][j] < 2)
+                sum += board[i][j];
+        }
+    }
+
+    return sum;
+}
+
+void finished_game(int total_ships, int* is_finished) {
+    if (total_ships == 0) {
+        *is_finished = 1;
+
+        printf("Has hundido todos los barcos!!");
+    }else {
+        printf("Quedan barcos enemigos...");
+    }
+}
+
 int main(void) {
     /*
      * HUNDIR LA FLOTA
@@ -133,11 +156,11 @@ int main(void) {
      *      [X] - Inicializar barcos en horizontal o vertical aleatoriamente.
      *      [X] - Flotar barcos donde haya espacio disponible y no choque con otros barcos.
      * [X] - Calcular: agua o barco tocado.
-     * [ ] - Calcular: fin del juego.
+     * [X] - Calcular: fin del juego.
      * [ ] - Recoger respuesta de coordenadas del usuarios.
      * [ ] - Menú.
      */
-
+    int is_finished = 0;
     int board[MAX_HEIGHT][MAX_WIDTH];
 
     init_board(board);
@@ -151,9 +174,14 @@ int main(void) {
 
     calculate_shoot(0, 0, board);
     calculate_shoot(1, 0, board);
+    calculate_shoot(0, 1, board);
+    calculate_shoot(0, 2, board);
+    calculate_shoot(0, 3, board);
 
     print_board(board);
 
+    int total_ships = still_floated_ships(board);
+    finished_game(total_ships, &is_finished);
 
     return 0;
 }
